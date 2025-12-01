@@ -26,8 +26,15 @@ def get_data() -> list:
         }
     ])
     return [
-        (datetime.date(2022, 1, 10), outdated_products_list, []),
-        (datetime.date(2025, 3, 1), outdated_products_list,
+        (datetime.date(2022, 2, 5), outdated_products_list,
+         ["duck"]),
+        (datetime.date(2022, 2, 10), outdated_products_list,
+         ["chicken", "duck"]),
+        (datetime.date(2022, 2, 11), outdated_products_list,
+         ["salmon", "chicken", "duck"]),
+        (datetime.date(2022, 2, 1), outdated_products_list,
+         []),
+        (datetime.date.today(), outdated_products_list,
          ["salmon", "chicken", "duck"]),
     ]
 
@@ -35,8 +42,14 @@ def get_data() -> list:
 data_for_test = get_data()
 
 
+def gen_keys(data_for_test: list) -> str:
+    dat_now, _, expected = data_for_test
+    return f"if data {dat_now}, expected {expected}"
+
+
 @pytest.mark.parametrize("dataset",
-                         data_for_test)
+                         data_for_test,
+                         ids=gen_keys)
 @mock.patch("app.main.datetime.date")
 def test_outdated_products(mock_datatime: mock.MagicMock,
                            dataset: list) -> None:
